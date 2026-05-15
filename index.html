@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Houaria Djabir — AI & Data Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #3d6b52;
+    --green-light: #5a8f6e;
+    --green-pale: #e8f0eb;
+    --cream: #f7f4ef;
+    --dark: #1a1f1c;
+    --mid: #4a5550;
+    --accent: #c4a882;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--dark);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    background: var(--green);
+    padding: 60px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-left::after {
+    content: '';
+    position: absolute;
+    right: -60px;
+    top: 0; bottom: 0;
+    width: 120px;
+    background: var(--green);
+    clip-path: polygon(0 0, 50% 0, 100% 50%, 50% 100%, 0 100%);
+    z-index: 2;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+
+  .hero-name {
+    font-size: clamp(42px, 6vw, 80px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.0;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.4s;
+  }
+
+  .hero-name span {
+    color: var(--accent);
+  }
+
+  .hero-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 18px;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.6s;
+  }
+
+  .hero-links {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.8s;
+  }
+
+  .hero-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.2s;
+  }
+
+  .hero-links a:hover { color: var(--accent); }
+
+  .hero-links a::before {
+    content: '→';
+    font-size: 14px;
+  }
+
+  .hero-right {
+    background: var(--cream);
+    padding: 60px 60px 60px 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  .stat-block {
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards;
+  }
+  .stat-block:nth-child(1) { animation-delay: 0.5s; }
+  .stat-block:nth-child(2) { animation-delay: 0.7s; }
+  .stat-block:nth-child(3) { animation-delay: 0.9s; }
+
+  .stat-num {
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--green);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--mid);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* NAV DOT */
+  .nav {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 100;
+  }
+
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green-pale);
+    border: 2px solid var(--green);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .nav-dot.active, .nav-dot:hover {
+    background: var(--green);
+    transform: scale(1.3);
+  }
+
+  /* SECTION COMMON */
+  section {
+    padding: 90px 8vw;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 50px;
+  }
+
+  /* PROJECTS */
+  #projects { background: var(--dark); }
+  #projects .section-title { color: #fff; }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .project-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 2px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: default;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--green-light);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .project-card:hover {
+    border-color: rgba(90,143,110,0.4);
+    transform: translateY(-4px);
+  }
+
+  .project-card:hover::before { transform: scaleX(1); }
+
+  .project-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--green-light);
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .project-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+
+  .project-desc {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 20px;
+  }
+
+  .ptag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba(90,143,110,0.15);
+    color: var(--green-light);
+    letter-spacing: 1px;
+  }
+
+  /* SKILLS */
+  #skills { background: var(--cream); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .skill-item {
+    padding: 20px 24px;
+    border: 1.5px solid var(--green-pale);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s;
+  }
+
+  .skill-item:hover {
+    border-color: var(--green);
+    background: var(--green-pale);
+    transform: translateX(4px);
+  }
+
+  .skill-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+  }
+
+  .skill-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--mid);
+  }
+
+  /* EDUCATION */
+  #education { background: var(--green-pale); }
+
+  .edu-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .edu-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 8px; bottom: 8px;
+    width: 2px;
+    background: var(--green);
+    opacity: 0.3;
+  }
+
+  .edu-item {
+    position: relative;
+    padding: 0 0 48px 32px;
+  }
+
+  .edu-item::before {
+    content: '';
+    position: absolute;
+    left: -32px;
+    top: 8px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--green);
+    border: 3px solid var(--green-pale);
+  }
+
+  .edu-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .edu-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+
+  .edu-inst {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--mid);
+  }
+
+  .edu-grade {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 4px 14px;
+    background: var(--green);
+    color: #fff;
+    border-radius: 20px;
+    letter-spacing: 1px;
+  }
+
+  /* LANGUAGES */
+  #languages { background: #fff; }
+
+  .lang-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 700px;
+  }
+
+  .lang-card {
+    padding: 28px 24px;
+    border-top: 3px solid var(--green);
+  }
+
+  .lang-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+
+  .lang-level {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--mid);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    padding: 40px 8vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  footer .name {
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  footer .contact {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  footer .contact a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  footer .contact a:hover { color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left::after { display: none; }
+    .hero-right { padding: 40px 30px; flex-direction: row; flex-wrap: wrap; }
+    .stat-num { font-size: 36px; }
+    .lang-grid { grid-template-columns: 1fr; }
+    .nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV DOTS -->
+<nav class="nav">
+  <div class="nav-dot active" onclick="scrollTo('#hero')"></div>
+  <div class="nav-dot" onclick="scrollTo('#projects')"></div>
+  <div class="nav-dot" onclick="scrollTo('#skills')"></div>
+  <div class="nav-dot" onclick="scrollTo('#education')"></div>
+  <div class="nav-dot" onclick="scrollTo('#languages')"></div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-left">
+    <p class="tag">Portfolio · 2025</p>
+    <h1 class="hero-name">Houaria<br><span>Djabir</span></h1>
+    <p class="hero-role">AI & Data Science Student<br>National Higher School of AI (ENSIA)</p>
+    <div class="hero-links">
+      <a href="mailto:houaria.djabir@ensia.edu.dz">houaria.djabir@ensia.edu.dz</a>
+      <a href="https://github.com/houaria617" target="_blank">github.com/houaria617</a>
+      <a href="https://www.linkedin.com/in/houaria-djabir675588294" target="_blank">LinkedIn Profile</a>
+      <a href="tel:+213779030549">+213 779 030 549</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="stat-block">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Projects Completed</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">12+</div>
+      <div class="stat-label">Technologies Mastered</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">18.29</div>
+      <div class="stat-label">Baccalaureat Grade</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label">Work</p>
+  <h2 class="section-title" style="color:#fff">Projects</h2>
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <p class="project-num">01 ·· FLAGSHIP</p>
+      <h3 class="project-title">Cowritex</h3>
+      <p class="project-desc">Human-in-the-loop AI research writing assistant using multi-agent AI architecture with RAG systems and real-time collaboration.</p>
+      <div class="project-tags">
+        <span class="ptag">LangGraph</span>
+        <span class="ptag">LangChain</span>
+        <span class="ptag">FastAPI</span>
+        <span class="ptag">RAG</span>
+        <span class="ptag">Python</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <p class="project-num">02 ·· ML</p>
+      <h3 class="project-title">ROP Prediction</h3>
+      <p class="project-desc">Full ML pipeline for predicting rate of penetration in drilling operations, developed under the supervision of DGwaves.</p>
+      <div class="project-tags">
+        <span class="ptag">Python</span>
+        <span class="ptag">ML Pipeline</span>
+        <span class="ptag">Data Science</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <p class="project-num">03 ·· MOBILE</p>
+      <h3 class="project-title">Rental Agency App</h3>
+      <p class="project-desc">Cross-platform mobile application for rental agency management, with a Flutter frontend and a Flask backend API.</p>
+      <div class="project-tags">
+        <span class="ptag">Flutter</span>
+        <span class="ptag">Flask</span>
+        <span class="ptag">Mobile</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <p class="project-num">04 ·· INTERNSHIP</p>
+      <h3 class="project-title">Mirasens Website</h3>
+      <p class="project-desc">Summer internship at Sirius.Net — contributed to the development of the Mirasens web platform.</p>
+      <div class="project-tags">
+        <span class="ptag">Web Dev</span>
+        <span class="ptag">Industry</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <p class="project-num">05 ·· SECURITY</p>
+      <h3 class="project-title">AI Attack Inversion</h3>
+      <p class="project-desc">Evaluates model inversion attacks on face recognition systems, covering both offensive attack strategies and defensive countermeasures.</p>
+      <div class="project-tags">
+        <span class="ptag">AI Security</span>
+        <span class="ptag">Face Recognition</span>
+        <span class="ptag">ML</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label">Expertise</p>
+  <h2 class="section-title">Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-item reveal"><span class="skill-dot"></span><span class="skill-name">Python / ML</span></div>
+    <div class="skill-item reveal"><span class="skill-dot"></span><span class="skill-name">Agentic AI · LangGraph</span></div>
+    <div class="skill-item reveal"><span class="skill-dot"></span><span class="skill-name">LangChain</span></div>
+    <div class="skill-item reveal"><span class="skill-dot"></span><span class="skill-name">FastAPI · NodeJS</span></div>
+    <div class="skill-item reveal"><span class="skill-dot"></span><span class="skill-name">ReactJS · HTML · CSS</span></div>
+    <div class="skill-item reveal"><span class="skill-dot"></span><span class="skill-name">PostgreSQL · MySQL</span></div>
+    <div class="skill-item reveal"><span class="skill-dot"></span><span class="skill-name">Flutter</span></div>
+    <div class="skill-item reveal"><span class="skill-dot"></span><span class="skill-name">C++</span></div>
+    <div class="skill-item reveal"><span class="skill-dot"></span><span class="skill-name">Java</span></div>
+    <div class="skill-item reveal"><span class="skill-dot"></span><span class="skill-name">Arduino · Raspberry Pi</span></div>
+    <div class="skill-item reveal"><span class="skill-dot"></span><span class="skill-name">Drones Basics</span></div>
+    <div class="skill-item reveal"><span class="skill-dot"></span><span class="skill-name">System Architecture</span></div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <p class="section-label">Background</p>
+  <h2 class="section-title">Education</h2>
+  <div class="edu-timeline">
+    <div class="edu-item reveal">
+      <p class="edu-year">2023 — 2028</p>
+      <h3 class="edu-title">Data Science & AI Engineering</h3>
+      <p class="edu-inst">National Higher School of AI (ENSIA)</p>
+    </div>
+    <div class="edu-item reveal">
+      <p class="edu-year">2023</p>
+      <h3 class="edu-title">Baccalaureat — Mathematics</h3>
+      <p class="edu-inst">Mathematics Branch</p>
+      <span class="edu-grade">Grade: 18.29 / 20</span>
+    </div>
+  </div>
+</section>
+
+<!-- LANGUAGES -->
+<section id="languages">
+  <p class="section-label">Communication</p>
+  <h2 class="section-title">Languages</h2>
+  <div class="lang-grid">
+    <div class="lang-card reveal">
+      <div class="lang-name">Arabic</div>
+      <div class="lang-level">Native</div>
+    </div>
+    <div class="lang-card reveal">
+      <div class="lang-name">French</div>
+      <div class="lang-level">B2 · Intermediate</div>
+    </div>
+    <div class="lang-card reveal">
+      <div class="lang-name">English</div>
+      <div class="lang-level">C1 · Professional</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="name">Houaria Djabir</div>
+  <div class="contact">
+    <a href="mailto:houaria.djabir@ensia.edu.dz">houaria.djabir@ensia.edu.dz</a>
+    <a href="tel:+213779030549">+213 779 030 549</a>
+    <a href="https://github.com/houaria617" target="_blank">GitHub</a>
+    <a href="https://www.linkedin.com/in/houaria-djabir675588294" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Nav dot tracking
+  const sections = ['#hero','#projects','#skills','#education','#languages'];
+  const dots = document.querySelectorAll('.nav-dot');
+
+  function scrollTo(id) {
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
+
+  window.addEventListener('scroll', () => {
+    let current = 0;
+    sections.forEach((id, i) => {
+      const el = document.querySelector(id);
+      if (el && window.scrollY >= el.offsetTop - 200) current = i;
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  });
+</script>
+</body>
+</html>
